@@ -1,8 +1,11 @@
 const UserModel = require('../models/UserModel');
 const express = require('express');
 const UserRoutes = express.Router();
+const jwt = require('jsonwebtoken');
 
 const app = express();
+
+const JWT_SECRET = process.env.JWT_SECRET || 'jwtpassword';
 
 // Create a new user
 UserRoutes.post('/signup', async (req, res) => {
@@ -45,7 +48,19 @@ UserRoutes.post('/login', async (req, res) => {
             return res.status(401).json({ message: 'Invalid email or password' });
         }
 
-        return res.status(200).json({ message: 'Login successful',  id: user._id, username: user.username, email: user.email });
+        // JWT Tokens - 1 hr expiration
+        const token = jwt.sign({ 
+            userId: user._id, 
+            email: user.email }, 
+            JWT_SECRET, 
+            { expiresIn: '1h' });
+
+        return res.status(200).json({
+            message: 'Login successful',
+            id: user._id, 
+            token,
+            username: user.username, 
+            email: user.email });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -6,4 +6,4 @@ Student Name: **Mitchell Stevenson**
 
 Update environment variables file with appropriate password
 
-Run the project with **node server.js**
+Run the project with **docker-compose up --build** in the root folder

@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  backend:
+    build: ./backend
+    container_name: backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    environment:
+      # Override DB_URL for Docker to use the mongo container
+      DB_URL: mongodb://mongo:27017/comp3123_assignment2
+      PORT: 8081
+      JWT_SECRET: supersecret123
+    depends_on:
+      - mongo
+    ports:
+      - "8081:8081"
+    volumes:
+      # So uploaded images persist on your host
+      - ./backend/uploads:/app/uploads
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: always
+    environment:
+      # This is read in axios.js via process.env.REACT_APP_API_BASE
+      REACT_APP_API_BASE: http://localhost:8081/api/v1
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  mongo-data:

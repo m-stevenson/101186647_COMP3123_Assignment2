@@ -6,6 +6,18 @@ const path = require('path');
 
 const app = express();
 
+// Handle upload of profile picture
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
 // Create a new employee
 EmployeeRoutes.post('/employees', upload.single('profile_picture'), async (req, res) => {
     try{
@@ -100,17 +112,5 @@ EmployeeRoutes.get('/employees/search', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-
-// Handle upload of profile picture
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
-    }
-});
-
-const upload = multer({ storage: storage });
 
 module.exports = EmployeeRoutes;

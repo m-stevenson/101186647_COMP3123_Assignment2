@@ -4,14 +4,21 @@ const employeeRoutes = require('./routes/EmployeeRoutes');
 const express = require('express');
 require('dotenv').config();
 const path = require('path');
+const cors = require('cors');
 
 const DB_URL = process.env.DB_URL || `mongodb+srv://mstevenson:${process.env.password}@cluster0.evyqiwb.mongodb.net/comp3123_assigment1?retryWrites=true&w=majority&appName=Cluster0`;
 const PORT = process.env.PORT || 8081;
 
 const app = express();
 
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Profile picture
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
