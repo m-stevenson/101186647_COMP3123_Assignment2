@@ -6,7 +6,7 @@ const path = require('path');
 
 const app = express();
 
-// Handle upload of profile picture
+// Upload profile picture
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
@@ -40,6 +40,26 @@ EmployeeRoutes.post('/employees', upload.single('profile_picture'), async (req, 
 EmployeeRoutes.get('/employees', async (req, res) => {
     try {
         const employees = await EmployeeModel.find();
+        res.status(200).json(employees);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Search employees by department or position
+EmployeeRoutes.get('/employees/search', async (req, res) => {
+    try {
+        const {department, position} = req.query;
+
+        const filter = {};
+        if (department) {
+            filter.department = { $regex: department, $options: 'i' };
+        }
+        if (position) {
+            filter.position = { $regex: position, $options: 'i' };
+        }
+
+        const employees = await EmployeeModel.find(filter);
         res.status(200).json(employees);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -87,30 +107,11 @@ EmployeeRoutes.delete('/employees/:id', async (req, res) => {
         if (!deletedEmployee) {
             return res.status(404).json({ message: 'Employee not found' });
         }
-        res.status(204).json({ message: 'Employee deleted successfully' });
+        res.status(204).json({ message: 'Employee deleted' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
 
-// Search employees by department or position
-EmployeeRoutes.get('/employees/search', async (req, res) => {
-    try {
-        const {department, position} = req.query;
-
-        const filter = {};
-        if (department) {
-            filter.department = department;
-        }
-        if (position) {
-            filter.position = position;
-        }
-
-        const employees = await EmployeeModel.find(filter);
-        res.status(200).json(employees);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
 
 module.exports = EmployeeRoutes;

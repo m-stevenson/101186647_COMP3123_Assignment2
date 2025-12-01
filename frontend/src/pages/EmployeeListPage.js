@@ -98,35 +98,11 @@ export default function EmployeeListPage() {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4 bg-[#f4f6fb]">
+    <div className="min-h-screen py-10 px-4">
       <div className="max-w-6xl mx-auto space-y-8">
         <h1 className="text-2xl font-semibold">Employee Management</h1>
 
-        <div className="grid gap-6 lg:grid-cols-[2fr,3fr]">
-          {/* SEARCH */}
-          <section className="bg-white rounded-xl shadow-sm border p-6">
-            <h2 className="text-lg font-semibold mb-4">Search Employees</h2>
-
-            <div className="space-y-4">
-              <input
-                type="text"
-                name="department"
-                value={filters.department}
-                onChange={handleFilterChange}
-                placeholder="Filter by Department"
-                className="w-full rounded-xl border px-4 py-2 text-sm"
-              />
-
-              <input
-                type="text"
-                name="position"
-                value={filters.position}
-                onChange={handleFilterChange}
-                placeholder="Filter by Position"
-                className="w-full rounded-xl border px-4 py-2 text-sm"
-              />
-            </div>
-          </section>
+        <div className="grid gap-6">
 
           {/* add employee */}
           <section className="bg-white rounded-xl shadow-sm border p-6">
@@ -179,6 +155,30 @@ export default function EmployeeListPage() {
           </section>
         </div>
 
+          {/* search */}
+          <section className="bg-white rounded-xl shadow-sm border p-6">
+            <h2 className="text-lg font-semibold mb-4">Search Employees</h2>
+            <div className="space-y-4">
+              <input
+                type="text"
+                name="department"
+                value={filters.department}
+                onChange={handleFilterChange}
+                placeholder="Filter by Department"
+                className="w-full rounded-xl px-4 py-2 text-sm"
+              />
+
+              <input
+                type="text"
+                name="position"
+                value={filters.position}
+                onChange={handleFilterChange}
+                placeholder="Filter by Position"
+                className="w-full rounded-xl px-4 py-2 text-sm"
+              />
+            </div>
+          </section>
+
         {/* employee list */}
         <section className="bg-white rounded-xl shadow-sm border p-6">
           <h2 className="text-lg font-semibold mb-4">Employee List</h2>
@@ -201,16 +201,16 @@ export default function EmployeeListPage() {
 
               <tbody>
                 {employees.map((emp) => (
-                  <tr key={emp._id} className="border-b hover:bg-gray-50">
+                  <tr key={emp._id}>
                     <td className="py-2 pr-4">
                       {emp.profile_picture ? (
                         <img
                           src={`${BACKEND_URL}/uploads/${emp.profile_picture}`}
-                          className="w-10 h-10 rounded-xl object-cover border"
+                          className="w-10 h-10 rounded-xl object-cover"
                           alt=""
                         />
                       ) : (
-                        <div className="w-10 h-10 rounded-xl bg-gray-200 flex items-center justify-center text-xs">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xs">
                           N/A
                         </div>
                       )}
@@ -230,7 +230,7 @@ export default function EmployeeListPage() {
                         onClick={() => handleDelete(emp._id)}
                         className="px-3 py-1 rounded-xl text-xs bg-red-100 text-red-600 hover:bg-red-200"
                       >
-                        Delete
+                        Delete Employee
                       </button>
                     </td>
                   </tr>

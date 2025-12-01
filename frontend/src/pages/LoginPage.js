@@ -35,7 +35,7 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium">
                 Email
               </label>
               <input
@@ -44,13 +44,13 @@ export default function LoginPage() {
                 value={form.email}
                 onChange={handleChange}
                 required
-                className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-rose-300 focus:border-rose-400"
+                className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium">
                 Password
               </label>
               <input
@@ -59,21 +59,19 @@ export default function LoginPage() {
                 value={form.password}
                 onChange={handleChange}
                 required
-                className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-rose-300 focus:border-rose-400"
+                className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm"
               />
             </div>
 
-            {/* Button */}
             <div className="pt-2 flex justify-center">
               <button
                 type="submit"
-                className="px-10 py-2.5 rounded-xl bg-rose-400 hover:bg-rose-500 text-white text-sm font-medium shadow-sm transition-transform duration-100 active:scale-95"
+                className="px-10 py-2.5 rounded-xl bg-rose-400 hover:bg-rose-500 text-white text-sm font-medium"
               >
                 Login
               </button>
             </div>
 
-            {/* Error */}
             {error && (
               <div className="text-center text-xs text-red-500 mt-1">
                 {error}
@@ -82,9 +80,8 @@ export default function LoginPage() {
           </form>
         </div>
 
-        {/* Footer link */}
-        <p className="mt-6 text-center text-sm text-gray-600">
-          Don&apos;t have an account?{' '}
+        <p className="mt-6 text-center text-sm">
+          Don't have an account?
           <Link to="/signup" className="text-rose-500 hover:underline">
             Register
           </Link>
