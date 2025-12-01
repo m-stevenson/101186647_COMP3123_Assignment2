@@ -9,7 +9,8 @@ const employeeSchema = new mongoose.Schema({
     date_of_joining: { type: Date, required: true },
     department: { type: String, required: true },
     created_at: { type: Date, default: Date.now },
-    updated_at : { type: Date, default: Date.now }
+    updated_at : { type: Date, default: Date.now },
+    profile_picture: { type: String }
 });
 
 module.exports = mongoose.model('Employee', employeeSchema);

@@ -1,12 +1,21 @@
 const EmployeeModel = require('../models/EmployeeModel');
 const express = require('express');
 const EmployeeRoutes = express.Router();
+const multer = require('multer');
+const path = require('path');
 
 const app = express();
 
 // Create a new employee
-EmployeeRoutes.post('/employees', async (req, res) => {
+EmployeeRoutes.post('/employees', upload.single('profile_picture'), async (req, res) => {
     try{
+
+        const employeeData = req.body;
+
+        if (req.file) {
+            employeeData.profile_picture = req.file.filename;
+        }
+
         const newEmployee = new EmployeeModel(req.body);
         const savedEmployee = await newEmployee.save();
         res.status(201).json(savedEmployee);
@@ -15,7 +24,7 @@ EmployeeRoutes.post('/employees', async (req, res) => {
     }
 });
 
-// List all employees
+// Get all employees
 EmployeeRoutes.get('/employees', async (req, res) => {
     try {
         const employees = await EmployeeModel.find();
@@ -39,8 +48,16 @@ EmployeeRoutes.get('/employees/:id', async (req, res) => {
 });
 
 // Update an employee by ID
-EmployeeRoutes.put('/employees/:id', async (req, res) => {
+EmployeeRoutes.put('/employees/:id', upload.single('profile_picture'), async (req, res) => {
     try {
+        const updateData = req.body;
+
+        if (req.file) {
+            updateData.profile_picture = req.file.filename;
+        }
+
+        updateData.updated_at = Date.now();
+
         const updatedEmployee = await EmployeeModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedEmployee) {
             return res.status(404).json({ message: 'Employee not found' });
@@ -83,5 +100,17 @@ EmployeeRoutes.get('/employees/search', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+// Handle upload of profile picture
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
 
 module.exports = EmployeeRoutes;
