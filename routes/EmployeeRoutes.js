@@ -64,4 +64,24 @@ EmployeeRoutes.delete('/employees/:id', async (req, res) => {
     }
 });
 
+// Search employees by department or position
+EmployeeRoutes.get('/employees/search', async (req, res) => {
+    try {
+        const {department, position} = req.query;
+
+        const filter = {};
+        if (department) {
+            filter.department = department;
+        }
+        if (position) {
+            filter.position = position;
+        }
+
+        const employees = await EmployeeModel.find(filter);
+        res.status(200).json(employees);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = EmployeeRoutes;
